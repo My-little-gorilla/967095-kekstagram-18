@@ -139,10 +139,10 @@
     commentCount.textContent = getRandomNumber(0, randomPictures.length);
 
 
-    var avatarsImg = document.querySelectorAll('.social__picture');
+    var avatars = document.querySelectorAll('.social__picture');
     for (var i = 0; i < avatars.length; i++) {
-      avatarsImg[i].src = randomComments[getRandomNumber(0, avatars.length)].avatar;
-      avatarsImg[i].alt = randomComments[getRandomNumber(0, randomComments.length)].name;
+      avatars[i].src = randomComments[getRandomNumber(0, avatars.length)].avatar;
+      avatars[i].alt = randomComments[getRandomNumber(0, randomComments.length)].name;
     }
 
     var commentsText = document.querySelectorAll('.social__text');
