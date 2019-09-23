@@ -8,6 +8,10 @@
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
+  var getElement = function (element) {
+    return document.querySelector(element);
+  };
+
   var names = [
     'guuu',
     'juuu',
@@ -47,14 +51,14 @@
     'weeeeeeeeeeeeee67',
     'weeeeeeeeeeeeee23'
   ];
-  var getUrlPicture = function () {
+  var getUrlPicture = function (sumPictures) {
     var pictures = [];
-    for (var i = 1; i <= TOTAL_POSTS; i++) {
+    for (var i = 1; i <= sumPictures; i++) {
       pictures[i] = 'photos/' + i + '.jpg';
     }
     return pictures;
   };
-  var photos = getUrlPicture();
+  var photos = getUrlPicture(TOTAL_POSTS);
 
 
   var getRandomLikes = function () {
@@ -100,6 +104,7 @@
 
   var randomComments = getRandomItems(getRandomComment);
   var randomPictures = getRandomItems(getRandomPicture);
+  console.log(randomPictures[getRandomNumber(0, randomPictures.length)].url)
 
 
   var renderPictures = function (pictures) {
@@ -118,6 +123,43 @@
     }
     container.appendChild(fragment);
   };
-
   renderPictures(randomPictures);
+
+
+  var renderComment  = function () {
+    var containerPostPicture = getElement('.big-picture');
+    containerPostPicture.classList.remove('hidden');
+
+
+    var socialBigPicture = getElement('.big-picture__img img');
+    socialBigPicture.src = randomPictures[getRandomNumber(0, randomPictures.length)].url;
+
+    var likeCount = getElement('.likes-count');
+    likeCount.textContent = randomPictures[getRandomNumber(0, randomPictures.length)].likes;
+
+    var commentCount = getElement('.comments-count');
+    commentCount.textContent = getRandomNumber(0, randomPictures.length);
+
+
+    var avatars = document.querySelectorAll('.social__picture');
+    for (var i = 0; i < avatars.length; i++) {
+      avatars[i].src = randomComments[getRandomNumber(0, avatars.length)].avatar;
+      avatars[i].alt = randomComments[getRandomNumber(0, randomComments.length)].name;
+    }
+
+    var commentsText = document.querySelectorAll('.social__text');
+    for (var i = 0; i < commentsText.length; i++) {
+      commentsText[i].textContent = randomComments[getRandomNumber(0, comments.length)].message;
+    }
+
+    var userMessage = getElement('.social__caption');
+    userMessage.textContent =  randomPictures[getRandomNumber(0, descriptions.length)].description;
+}
+  renderComment();
+
+var commentCount = getElement('.social__comment-count');
+commentCount.classList.add('visually-hidden');
+var commentLoader = getElement('.comments-loader');
+commentLoader.classList.add('visually-hidden');
+
 })();
