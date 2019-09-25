@@ -3,34 +3,9 @@
   var TOTAL_POSTS = 25;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
-
-  var getRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
-  var getElement = function (element) {
-    return document.querySelector(element);
-  };
-
-  var names = [
-    'guuu',
-    'juuu',
-    'kuuu',
-    'luuu',
-    'buuu',
-    'duuu'
-  ];
-
-  var avatars = [
-    'img/avatar-1.svg',
-    'img/avatar-2.svg',
-    'img/avatar-3.svg',
-    'img/avatar-4.svg',
-    'img/avatar-5.svg',
-    'img/avatar-6.svg'
-  ];
-
-  var comments = [
+  var NAMES = ['guuu', 'juuu', 'kuuu', 'luuu', 'buuu', 'duuu'];
+  var AVATARS = ['img/avatar-1.svg', 'img/avatar-2.svg', 'img/avatar-3.svg', 'img/avatar-4.svg', 'img/avatar-5.svg', 'img/avatar-6.svg'];
+  var COMMENTS = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
     'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -38,19 +13,37 @@
     'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
+  var DESCRIPTIONS = [
+      'weeeeeeeeeeeeee666',
+      'weeeeeeeeeeeeee7543',
+      'weeeeeeeeeeeeee99',
+      'weeeeeeeeeeeeee78',
+      'weeeeeeeeeeeeee278',
+      'weeeeeeeeeeeeee33',
+      'weeeeeeeeeeeeee894',
+      'weeeeeeeeeeeeee677',
+      'weeeeeeeeeeeeee67',
+      'weeeeeeeeeeeeee23'
+    ];
 
-  var descriptions = [
-    'weeeeeeeeeeeeee666',
-    'weeeeeeeeeeeeee7543',
-    'weeeeeeeeeeeeee99',
-    'weeeeeeeeeeeeee78',
-    'weeeeeeeeeeeeee278',
-    'weeeeeeeeeeeeee33',
-    'weeeeeeeeeeeeee894',
-    'weeeeeeeeeeeeee677',
-    'weeeeeeeeeeeeee67',
-    'weeeeeeeeeeeeee23'
-  ];
+  var getRandomNumber = function (min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+
+
+  var findElement = function (query, element, all) {
+  if (!element) {
+    element = document;
+  }
+  var method = 'querySelector' + (all ? 'All' : '');
+  return element[method](query);
+}
+
+
+  var template = findElement('#picture').content.querySelector('.picture');
+  var container = findElement('.pictures');
+
+
   var getUrlPicture = function (sumPictures) {
     var pictures = [];
     for (var i = 1; i <= sumPictures; i++) {
@@ -80,9 +73,9 @@
 
   var getRandomComment = function () {
     var userComment = {
-      avatar: getRandomPostItem(avatars),
-      message: getRandomPostItem(comments),
-      name: getRandomPostItem(names)
+      avatar: getRandomPostItem(AVATARS),
+      message: getRandomPostItem(COMMENTS),
+      name: getRandomPostItem(NAMES)
     };
     return userComment;
   };
@@ -95,8 +88,8 @@
     var picture = {
       url: photo,
       likes: likes,
-      comments: getRandomPostItem(comments),
-      description: getRandomPostItem(descriptions)
+      comments: getRandomPostItem(COMMENTS),
+      description: getRandomPostItem(DESCRIPTIONS)
     };
     return picture;
   };
@@ -107,8 +100,6 @@
 
   var renderPictures = function (pictures) {
     var fragment = document.createDocumentFragment();
-    var template = document.querySelector('#picture').content.querySelector('.picture');
-    var container = document.querySelector('.pictures');
 
     for (var i = 0; i < pictures.length; i++) {
       var picture = pictures[i];
@@ -124,40 +115,42 @@
   renderPictures(randomPictures);
 
 
-  var renderComment = function () {
-    var containerPostPicture = getElement('.big-picture');
+  // перенести в модуль
+
+  var postContainer = find('.big-picture__preview');
+  var containerPostPicture = findElement('.big-picture', postContainer);
+  var socialBigPicture = findElement('.big-picture__img img', postContainer);
+  var likeCount = findElement('.likes-count', postContainer);
+  var commentCount = findElement('.comments-count', postContainer);
+  var AVATARS = findElement('.social__picture', postContainer, true);
+  var commentsText = findElement('.social__text', postContainer, true);
+  var userMessage = findElement('.social__caption', postContainer);
+
+  var renderPost = function (postElement) {
     containerPostPicture.classList.remove('hidden');
+    socialBigPicture.src = postElement[getRandomNumber(0, postElement.length)].url;
+    likeCount.textContent = postElement[getRandomNumber(0, postElement.length)].likes;
+    commentCount.textContent = getRandomNumber(0, postElement.length);
+    userMessage.textContent = postElement[getRandomNumber(0, DESCRIPTIONS.length)].description;
+  }
 
-
-    var socialBigPicture = getElement('.big-picture__img img');
-    socialBigPicture.src = randomPictures[getRandomNumber(0, randomPictures.length)].url;
-
-    var likeCount = getElement('.likes-count');
-    likeCount.textContent = randomPictures[getRandomNumber(0, randomPictures.length)].likes;
-
-    var commentCount = getElement('.comments-count');
-    commentCount.textContent = getRandomNumber(0, randomPictures.length);
-
-
-    var avatars = document.querySelectorAll('.social__picture');
-    for (var i = 0; i < avatars.length; i++) {
-      avatars[i].src = randomComments[getRandomNumber(0, avatars.length)].avatar;
-      avatars[i].alt = randomComments[getRandomNumber(0, randomComments.length)].name;
+  var renderComment = function (commentElement) {
+    for (var i = 0; i < AVATARS.length; i++) {
+      AVATARS[i].src = commentElement[getRandomNumber(0, AVATARS.length)].avatar;
+      AVATARS[i].alt = commentElement[getRandomNumber(0, commentElement.length)].name;
     }
-
-    var commentsText = document.querySelectorAll('.social__text');
     for (var j = 0; j < commentsText.length; j++) {
-      commentsText[j].textContent = randomComments[getRandomNumber(0, comments.length)].message;
+      commentsText[j].textContent = commentElement[getRandomNumber(0, COMMENTS.length)].message;
     }
-
-    var userMessage = getElement('.social__caption');
-    userMessage.textContent = randomPictures[getRandomNumber(0, descriptions.length)].description;
   };
-  renderComment();
+  renderPost(randomPictures);
+  renderComment(randomComments);
 
-  var commentCount = getElement('.social__comment-count');
+  var commentCount = findElement('.social__comment-count');
   commentCount.classList.add('visually-hidden');
-  var commentLoader = getElement('.comments-loader');
+  var commentLoader = findElement('.comments-loader');
   commentLoader.classList.add('visually-hidden');
+
+// перенести в модуль^^^
 
 })();
