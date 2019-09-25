@@ -114,43 +114,4 @@
   };
   renderPictures(randomPictures);
 
-
-  // перенести в модуль
-
-  var postContainer = find('.big-picture__preview');
-  var containerPostPicture = findElement('.big-picture', postContainer);
-  var socialBigPicture = findElement('.big-picture__img img', postContainer);
-  var likeCount = findElement('.likes-count', postContainer);
-  var commentCount = findElement('.comments-count', postContainer);
-  var AVATARS = findElement('.social__picture', postContainer, true);
-  var commentsText = findElement('.social__text', postContainer, true);
-  var userMessage = findElement('.social__caption', postContainer);
-
-  var renderPost = function (postElement) {
-    containerPostPicture.classList.remove('hidden');
-    socialBigPicture.src = postElement[getRandomNumber(0, postElement.length)].url;
-    likeCount.textContent = postElement[getRandomNumber(0, postElement.length)].likes;
-    commentCount.textContent = getRandomNumber(0, postElement.length);
-    userMessage.textContent = postElement[getRandomNumber(0, DESCRIPTIONS.length)].description;
-  }
-
-  var renderComment = function (commentElement) {
-    for (var i = 0; i < AVATARS.length; i++) {
-      AVATARS[i].src = commentElement[getRandomNumber(0, AVATARS.length)].avatar;
-      AVATARS[i].alt = commentElement[getRandomNumber(0, commentElement.length)].name;
-    }
-    for (var j = 0; j < commentsText.length; j++) {
-      commentsText[j].textContent = commentElement[getRandomNumber(0, COMMENTS.length)].message;
-    }
-  };
-  renderPost(randomPictures);
-  renderComment(randomComments);
-
-  var commentCount = findElement('.social__comment-count');
-  commentCount.classList.add('visually-hidden');
-  var commentLoader = findElement('.comments-loader');
-  commentLoader.classList.add('visually-hidden');
-
-// перенести в модуль^^^
-
 })();
