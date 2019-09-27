@@ -14,17 +14,17 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
   var DESCRIPTIONS = [
-      'weeeeeeeeeeeeee666',
-      'weeeeeeeeeeeeee7543',
-      'weeeeeeeeeeeeee99',
-      'weeeeeeeeeeeeee78',
-      'weeeeeeeeeeeeee278',
-      'weeeeeeeeeeeeee33',
-      'weeeeeeeeeeeeee894',
-      'weeeeeeeeeeeeee677',
-      'weeeeeeeeeeeeee67',
-      'weeeeeeeeeeeeee23'
-    ];
+    'weeeeeeeeeeeeee666',
+    'weeeeeeeeeeeeee7543',
+    'weeeeeeeeeeeeee99',
+    'weeeeeeeeeeeeee78',
+    'weeeeeeeeeeeeee278',
+    'weeeeeeeeeeeeee33',
+    'weeeeeeeeeeeeee894',
+    'weeeeeeeeeeeeee677',
+    'weeeeeeeeeeeeee67',
+    'weeeeeeeeeeeeee23'
+  ];
 
   var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -32,12 +32,12 @@
 
 
   var findElement = function (query, element, all) {
-  if (!element) {
-    element = document;
-  }
-  var method = 'querySelector' + (all ? 'All' : '');
-  return element[method](query);
-}
+    if (!element) {
+      element = document;
+    }
+    var method = 'querySelector' + (all ? 'All' : '');
+    return element[method](query);
+  };
 
 
   var template = findElement('#picture').content.querySelector('.picture');
@@ -58,7 +58,7 @@
     return getRandomNumber(MIN_LIKES, MAX_LIKES);
   };
 
-  var getRandomPostItem = function (item) {
+  var getRandomPostItems = function (item) {
     return item[getRandomNumber(0, item.length)];
   };
 
@@ -73,9 +73,9 @@
 
   var getRandomComment = function () {
     var userComment = {
-      avatar: getRandomPostItem(AVATARS),
-      message: getRandomPostItem(COMMENTS),
-      name: getRandomPostItem(NAMES)
+      avatar: getRandomPostItems(AVATARS),
+      message: getRandomPostItems(COMMENTS),
+      name: getRandomPostItems(NAMES)
     };
     return userComment;
   };
@@ -88,14 +88,13 @@
     var picture = {
       url: photo,
       likes: likes,
-      comments: getRandomPostItem(COMMENTS),
-      description: getRandomPostItem(DESCRIPTIONS)
+      comments: getRandomItems(getRandomComment),
+      description: getRandomPostItems(DESCRIPTIONS)
     };
     return picture;
   };
 
-
-  var randomComments = getRandomItems(getRandomComment);
+  // var randomComments = getRandomItems(getRandomComment);
   var randomPictures = getRandomItems(getRandomPicture);
 
   var renderPictures = function (pictures) {
